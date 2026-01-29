@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:semester2_postman/views/dashboard.dart';
 import 'package:semester2_postman/views/login_view.dart';
+import 'package:semester2_postman/views/produk_view.dart';
+import 'package:semester2_postman/views/transaksi_view.dart';
 import 'package:semester2_postman/views/register_user_view.dart';
 
 void main() {
@@ -12,6 +14,8 @@ void main() {
         '/login': (context) => const LoginView(),
         '/register': (context) => const RegisterUserView(),
         '/dashboard': (context) => const DashboardView(),
+        '/produk': (context) => const ProdukView(),
+        '/transaksi': (context) => const TransaksiView(),
       },
     ),
   );
