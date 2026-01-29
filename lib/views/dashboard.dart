@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:semester2_postman/models/user_login.dart';
+import 'package:semester2_postman/widgets/bottom_nav.dart';
 
 class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
@@ -63,10 +64,7 @@ class _DashboardViewState extends State<DashboardView> {
                     onPressed: () {
                       Navigator.popAndPushNamed(context, '/login');
                     },
-                    icon: const Icon(
-                      Icons.logout,
-                      color: Colors.white,
-                    ),
+                    icon: const Icon(Icons.logout, color: Colors.white),
                   ),
                 ],
               ),
@@ -118,6 +116,7 @@ class _DashboardViewState extends State<DashboardView> {
           ],
         ),
       ),
+      bottomNavigationBar: BottomNav(0),
     );
   }
 }
