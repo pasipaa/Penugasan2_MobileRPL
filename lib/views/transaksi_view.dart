@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:semester2_postman/widgets/bottom_nav.dart';
 
-class ProdukView extends StatefulWidget {
-  const ProdukView({super.key});
+class TransaksiView extends StatefulWidget {
+  const TransaksiView({super.key});
 
   @override
-  State<ProdukView> createState() => _ProdukViewState();
+  State<TransaksiView> createState() => _TransaksiViewState();
 }
 
-class _ProdukViewState extends State<ProdukView> {
+class _TransaksiViewState extends State<TransaksiView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,38 +22,39 @@ class _ProdukViewState extends State<ProdukView> {
         ),
         child: Column(
           children: [
-            /// APPBAR CUSTOM
+            /// APPBAR CUSTOM (BIAR SERAGAM)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
               width: double.infinity,
               child: const Text(
-                "Produk",
-                textAlign: TextAlign.center,
+                "Transaksi Saya",
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
+                textAlign: TextAlign.center,
               ),
             ),
 
-            /// GRID PRODUK
+            /// LIST PESANAN
             Expanded(
-              child: Padding(
+              child: ListView(
                 padding: const EdgeInsets.all(12),
-                child: GridView.builder(
-                  itemCount: 6,
-                  gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
-                    childAspectRatio: 0.7,
+                children: [
+                  _pesananCard(
+                    produk: "Kartu ID Custom",
+                    qty: 2,
+                    total: "Rp107.836",
+                    status: "Selesai",
                   ),
-                  itemBuilder: (context, index) {
-                    return _produkCard();
-                  },
-                ),
+                  _pesananCard(
+                    produk: "Lanyard Printing",
+                    qty: 65,
+                    total: "Rp525.420",
+                    status: "Selesai",
+                  ),
+                ],
               ),
             ),
           ],
@@ -65,62 +66,86 @@ class _ProdukViewState extends State<ProdukView> {
     );
   }
 
-  /// ================= CARD PRODUK =================
-  Widget _produkCard() {
+  /// ================= CARD PESANAN =================
+  Widget _pesananCard({
+    required String produk,
+    required int qty,
+    required String total,
+    required String status,
+  }) {
     return Card(
+      margin: const EdgeInsets.only(bottom: 12),
       elevation: 5,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(14),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          /// GAMBAR PRODUK
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade300,
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(14),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            /// STATUS
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                status,
+                style: const TextStyle(
+                  color: Color(0xff1e88e5),
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              child: const Icon(
-                Icons.image,
-                size: 60,
+            ),
+
+            const SizedBox(height: 6),
+
+            /// PRODUK
+            Text(
+              produk,
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+
+            const SizedBox(height: 4),
+
+            Text(
+              "Jumlah: $qty",
+              style: const TextStyle(
                 color: Colors.grey,
               ),
             ),
-          ),
 
-          /// INFO PRODUK
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  "Produk Contoh",
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(height: 6),
-                Text(
-                  "Rp159.000",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                    color: Color(0xff1e88e5),
-                  ),
-                ),
-              ],
+            const SizedBox(height: 8),
+
+            /// TOTAL
+            Text(
+              "Total: $total",
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
             ),
-          ),
-        ],
+
+            const SizedBox(height: 12),
+
+            /// BUTTON
+            Align(
+              alignment: Alignment.centerRight,
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xff1e88e5),
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: const Text("Detail"),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
