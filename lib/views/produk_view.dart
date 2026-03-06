@@ -1,14 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:semester2_postman/models/toko_models.dart';
+import 'package:semester2_postman/models/response_data_list.dart';
+import 'package:semester2_postman/services/admin.dart';
 import 'package:semester2_postman/widgets/bottom_nav.dart';
 
 class ProdukView extends StatefulWidget {
   const ProdukView({super.key});
-
   @override
   State<ProdukView> createState() => _ProdukViewState();
 }
 
 class _ProdukViewState extends State<ProdukView> {
+  final AdminService adminService = AdminService();
+
+  List<AdminModel> produk = [];
+  bool isLoading = true;
+  String message = "";
+
+  Future<void> getProduk() async {
+    setState(() => isLoading = true);
+
+    try {
+      ResponseDataList<AdminModel> response =
+          await adminService.getAdmin();
+
+      if (response.status) {
+        setState(() {
+          produk = response.data;
+          message = "";
+        });
+      } else {
+        setState(() {
+          produk = [];
+          message = response.message;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        produk = [];
+        message = "Terjadi kesalahan koneksi";
+      });
+    }
+
+    setState(() => isLoading = false);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getProduk();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,106 +64,125 @@ class _ProdukViewState extends State<ProdukView> {
         ),
         child: Column(
           children: [
-            /// APPBAR CUSTOM
+
+            // 🔹 HEADER
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
               width: double.infinity,
               child: const Text(
                 "Produk",
-                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
+                textAlign: TextAlign.center,
               ),
             ),
 
-            /// GRID PRODUK
+            // 🔹 BODY
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: GridView.builder(
-                  itemCount: 6,
-                  gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
-                    childAspectRatio: 0.7,
-                  ),
-                  itemBuilder: (context, index) {
-                    return _produkCard();
-                  },
-                ),
-              ),
+              child: isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
+                    )
+                  : produk.isEmpty
+                      ? Center(
+                          child: Text(
+                            message,
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: GridView.builder(
+                            itemCount: produk.length,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 20,
+                              mainAxisSpacing: 20,
+                              childAspectRatio: 0.75,
+                            ),
+                            itemBuilder: (context, index) {
+                              final item = produk[index];
+
+                              return Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.25),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 5),
+                                    ),
+                                  ],
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(25),
+                                  child: Column(
+                                    children: [
+
+                                      // 🔹 IMAGE
+                                      Expanded(
+                                        child: Stack(
+                                          children: [
+                                            Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+                                            image: DecorationImage(
+                                            image: NetworkImage(item.image!), fit: BoxFit.cover
+                                          ),
+                                         
+                                          ),
+                                                ),
+                                          ],
+                                        ),
+                                      ),
+
+                                      // 🔹 NAMA + HARGA
+                                      Container(
+                                        width: double.infinity,
+                                        padding: const EdgeInsets.all(14),
+                                        color: const Color(0xFFE6E6EA),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              item.namaBarang ?? "",
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              "Rp ${item.harga ?? 0}",
+                                              style: const TextStyle(
+                                                color: Colors.black54,
+                                                fontSize: 13,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
             ),
           ],
         ),
       ),
-
-      /// NAVBAR
       bottomNavigationBar: BottomNav(1),
-    );
-  }
-
-  /// ================= CARD PRODUK =================
-  Widget _produkCard() {
-    return Card(
-      elevation: 5,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          /// GAMBAR PRODUK
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade300,
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(14),
-                ),
-              ),
-              child: const Icon(
-                Icons.image,
-                size: 60,
-                color: Colors.grey,
-              ),
-            ),
-          ),
-
-          /// INFO PRODUK
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  "Produk Contoh",
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(height: 6),
-                Text(
-                  "Rp159.000",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                    color: Color(0xff1e88e5),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
