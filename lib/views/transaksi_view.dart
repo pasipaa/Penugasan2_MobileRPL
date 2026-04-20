@@ -149,4 +149,8 @@ class _TransaksiViewState extends State<TransaksiView> {
       ),
     );
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> fa53fe357573f635c4230936b45c6e1f63f5cb5b

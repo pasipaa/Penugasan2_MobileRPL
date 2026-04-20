@@ -1,15 +1,25 @@
+<<<<<<< HEAD
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+=======
+import 'package:flutter/material.dart';
+>>>>>>> fa53fe357573f635c4230936b45c6e1f63f5cb5b
 import 'package:semester2_postman/models/toko_models.dart';
 import 'package:semester2_postman/models/response_data_list.dart';
 import 'package:semester2_postman/services/admin.dart';
 import 'package:semester2_postman/widgets/bottom_nav.dart';
+<<<<<<< HEAD
 import 'package:semester2_postman/views/tambah_toko_view.dart';
 
 class ProdukView extends StatefulWidget {
   const ProdukView({super.key});
 
+=======
+
+class ProdukView extends StatefulWidget {
+  const ProdukView({super.key});
+>>>>>>> fa53fe357573f635c4230936b45c6e1f63f5cb5b
   @override
   State<ProdukView> createState() => _ProdukViewState();
 }
@@ -25,6 +35,7 @@ class _ProdukViewState extends State<ProdukView> {
     setState(() => isLoading = true);
 
     try {
+<<<<<<< HEAD
       ResponseDataList<AdminModel> response = await adminService.getAdmin();
 
       if (response.status) {
@@ -199,6 +210,30 @@ class _ProdukViewState extends State<ProdukView> {
         },
       ),
     );
+=======
+      ResponseDataList<AdminModel> response =
+          await adminService.getAdmin();
+
+      if (response.status) {
+        setState(() {
+          produk = response.data;
+          message = "";
+        });
+      } else {
+        setState(() {
+          produk = [];
+          message = response.message;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        produk = [];
+        message = "Terjadi kesalahan koneksi";
+      });
+    }
+
+    setState(() => isLoading = false);
+>>>>>>> fa53fe357573f635c4230936b45c6e1f63f5cb5b
   }
 
   @override
@@ -210,6 +245,7 @@ class _ProdukViewState extends State<ProdukView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+<<<<<<< HEAD
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xff1e88e5),
         child: const Icon(Icons.add),
@@ -226,6 +262,8 @@ class _ProdukViewState extends State<ProdukView> {
         },
       ),
 
+=======
+>>>>>>> fa53fe357573f635c4230936b45c6e1f63f5cb5b
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -236,6 +274,11 @@ class _ProdukViewState extends State<ProdukView> {
         ),
         child: Column(
           children: [
+<<<<<<< HEAD
+=======
+
+            // 🔹 HEADER
+>>>>>>> fa53fe357573f635c4230936b45c6e1f63f5cb5b
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
               width: double.infinity,
@@ -250,6 +293,7 @@ class _ProdukViewState extends State<ProdukView> {
               ),
             ),
 
+<<<<<<< HEAD
             Expanded(
               child: isLoading
                   ? const Center(
@@ -268,11 +312,35 @@ class _ProdukViewState extends State<ProdukView> {
                         itemCount: produk.length,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
+=======
+            // 🔹 BODY
+            Expanded(
+              child: isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
+                    )
+                  : produk.isEmpty
+                      ? Center(
+                          child: Text(
+                            message,
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: GridView.builder(
+                            itemCount: produk.length,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+>>>>>>> fa53fe357573f635c4230936b45c6e1f63f5cb5b
                               crossAxisCount: 2,
                               crossAxisSpacing: 20,
                               mainAxisSpacing: 20,
                               childAspectRatio: 0.75,
                             ),
+<<<<<<< HEAD
                         itemBuilder: (context, index) {
                           final item = produk[index];
 
@@ -369,6 +437,80 @@ class _ProdukViewState extends State<ProdukView> {
                         },
                       ),
                     ),
+=======
+                            itemBuilder: (context, index) {
+                              final item = produk[index];
+
+                              return Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.25),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 5),
+                                    ),
+                                  ],
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(25),
+                                  child: Column(
+                                    children: [
+
+                                      // 🔹 IMAGE
+                                      Expanded(
+                                        child: Stack(
+                                          children: [
+                                            Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+                                            image: DecorationImage(
+                                            image: NetworkImage(item.image!), fit: BoxFit.cover
+                                          ),
+                                         
+                                          ),
+                                                ),
+                                          ],
+                                        ),
+                                      ),
+
+                                      // 🔹 NAMA + HARGA
+                                      Container(
+                                        width: double.infinity,
+                                        padding: const EdgeInsets.all(14),
+                                        color: const Color(0xFFE6E6EA),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              item.namaBarang ?? "",
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              "Rp ${item.harga ?? 0}",
+                                              style: const TextStyle(
+                                                color: Colors.black54,
+                                                fontSize: 13,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+>>>>>>> fa53fe357573f635c4230936b45c6e1f63f5cb5b
             ),
           ],
         ),

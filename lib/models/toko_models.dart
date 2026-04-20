@@ -17,6 +17,7 @@ class AdminModel {
     this.image,
   });
 
+<<<<<<< HEAD
   AdminModel.fromJson(Map<String, dynamic> json) {
     id = int.tryParse(json["id"].toString());
 
@@ -32,4 +33,13 @@ class AdminModel {
       image = null;
     }
   }
+=======
+  AdminModel.fromJson(Map<String, dynamic> json)
+      : id = json["id"],
+        namaBarang = json["nama_barang"],
+        deskripsi = json["deskripsi"],
+        stok = json["stok"],
+        harga = json["harga"],
+        image = "${url.BaseUrlTanpaAPi}/${json["image"]}";
+>>>>>>> fa53fe357573f635c4230936b45c6e1f63f5cb5b
 }
